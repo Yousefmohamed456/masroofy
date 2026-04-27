@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:masroofy/features/budget/screens/home/dashboard_screen.dart';
-import 'package:masroofy/utils/utils/constants/colors.dart';
-import 'package:masroofy/utils/utils/helpers/helper_functions.dart';
+import 'package:masroofy/utils/constants/colors.dart';
+import 'package:masroofy/utils/helpers/helper_functions.dart';
 
 
 
