@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 
 import 'package:get/get.dart';
-import '../../utils/utils/constants/colors.dart';
-import '../../utils/utils/constants/sizes.dart';
-import '../../utils/utils/helpers/helper_functions.dart';
+import 'package:masroofy/utils/constants/colors.dart';
+import 'package:masroofy/utils/constants/sizes.dart';
+import 'package:masroofy/utils/helpers/helper_functions.dart';
+
 import 'controllers/animation_loader_controller.dart';
 import 'lottie_animation.dart';
 

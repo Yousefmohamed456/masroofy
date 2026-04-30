@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:masroofy/common/texts/currency_text.dart';
-import 'package:masroofy/utils/utils/constants/colors.dart';
-import 'package:masroofy/utils/utils/constants/sizes.dart';
-import 'package:masroofy/utils/utils/helpers/helper_functions.dart';
+import 'package:masroofy/utils/constants/colors.dart';
+import 'package:masroofy/utils/constants/sizes.dart';
+import 'package:masroofy/utils/helpers/helper_functions.dart';
 
 class OverviewContainer extends StatelessWidget {
   final double fillPercentage;
