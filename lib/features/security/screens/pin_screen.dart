@@ -27,7 +27,7 @@ class _PinScreenState extends State<PinScreen> {
     setState(() => _isLoading = true);
     _timer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
       setState(() {
-        _dots = _dots.length >= 3 ? '' : _dots + '.';
+        _dots = _dots.length >= 3 ? '' : '$_dots.';
       });
     });
   }

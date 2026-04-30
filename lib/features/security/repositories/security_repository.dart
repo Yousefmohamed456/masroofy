@@ -8,6 +8,7 @@ class SecurityRepository extends GetxController {
   @override
   void onReady() {
     FlutterNativeSplash.remove();
+    redirectToDashboard();
   }
 
   void redirectToDashboard() {

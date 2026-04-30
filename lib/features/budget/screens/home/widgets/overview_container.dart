@@ -86,6 +86,7 @@ class CircularProgressPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
     canvas.drawCircle(center, radius, trackPaint);
 
+
     // draw the progress
     Paint progressPaint = Paint()
       ..color = progressColor
@@ -93,8 +94,8 @@ class CircularProgressPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
-    double startAngle = -pi / 2;
-    double endAngle = 2 * pi * percentage;
+    const double startAngle = -pi/2;
+    final double endAngle = 2 * pi * percentage;
 
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
