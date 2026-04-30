@@ -5,15 +5,13 @@ import 'package:masroofy/navigation_menu.dart';
 class SecurityRepository extends GetxController {
   static SecurityRepository get instance => Get.find();
 
-  /// Function that is called on app launch
   @override
   void onReady() {
     FlutterNativeSplash.remove();
-    screenRedirect();
   }
 
-  Future<void> screenRedirect() async {
-    Get.offAll(()=> NavigationMenu());
+  void redirectToDashboard() {
+    Get.offAll(() => const NavigationMenu());
   }
 
   bool checkSecurity() {

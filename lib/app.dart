@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:masroofy/routes/app_routes.dart';
-import 'package:masroofy/utils/utils/constants/colors.dart';
-import 'package:masroofy/utils/utils/theme/theme.dart';
+import 'package:masroofy/utils/constants/colors.dart';
+import 'package:masroofy/utils/theme/theme.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -16,10 +16,7 @@ class App extends StatelessWidget {
       darkTheme: AppTheme.darkTheme,
       debugShowCheckedModeBanner: false,
       getPages: AppRoutes.pages,
-      home: const Scaffold(
-        backgroundColor: AppColors.primaryColor,
-        body: Center(child: CircularProgressIndicator(color: Colors.white)),
-      ),
+      initialRoute: '/pin',
     );
   }
 }
