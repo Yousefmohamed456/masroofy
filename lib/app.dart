@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:masroofy/routes/app_routes.dart';
-import 'package:masroofy/utils/constants/colors.dart';
 import 'package:masroofy/utils/theme/theme.dart';
 
 class App extends StatelessWidget {
@@ -11,12 +9,13 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+
       themeMode: ThemeMode.system,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      debugShowCheckedModeBanner: false,
+      initialRoute: AppRoutes.pin,
       getPages: AppRoutes.pages,
-      initialRoute: '/pin',
     );
   }
 }
