@@ -5,10 +5,10 @@ import 'package:masroofy/utils/constants/colors.dart';
 import 'package:masroofy/utils/constants/sizes.dart';
 import 'package:masroofy/utils/helpers/helper_functions.dart';
 
-class OverviewContainer extends StatelessWidget {
+class SpendingLimitContainer extends StatelessWidget {
   final double fillPercentage;
 
-  const OverviewContainer({super.key, required this.fillPercentage});
+  const SpendingLimitContainer({super.key, required this.fillPercentage});
 
   @override
   Widget build(BuildContext context) {

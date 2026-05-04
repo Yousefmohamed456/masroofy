@@ -12,8 +12,8 @@ class PinScreen extends StatelessWidget {
 
   const PinScreen({
     super.key,
-    this.title = 'Enter a 4-digit PIN',
-    this.subtitle = 'Used to unlock the app later',
+    this.title = 'Enter the 4-digit PIN',
+    this.subtitle = 'Used to unlock the app',
     this.onPinEntered,
   });
 
@@ -23,91 +23,92 @@ class PinScreen extends StatelessWidget {
     final dark = AppHelperFunctions.isDarkMode(context);
     return Scaffold(
       backgroundColor: dark ? AppColors.dark : AppColors.light,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
-          child: Column(
-            children: [
-              const SizedBox(height: 40),
-              Obx(
-                () => Text(
-                  controller.isLoading.value
-                      ? "Verifying ${controller.dots.value}"
-                      : (controller.isSetup.value
-                            ? 'Create a 4 digit PIN'
-                            : title),
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
-              ),
-              const SizedBox(height: AppSizes.spaceBtwItems / 2),
-              Obx(() {
-                if (!controller.isLoading.value) {
-                  return Text(
-                    controller.isSetup.value
-                        ? subtitle
-                        : 'Verify your identity',
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(AppSizes.defaultSpace),
+            child: Column(
+              children: [
+                Obx(
+                  () => Text(
+                    controller.isLoading.value
+                        ? "Verifying ${controller.dots.value}"
+                        : (controller.isSetup.value
+                              ? 'Create a 4 digit PIN'
+                              : title),
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  );
-                }
-                return SizedBox();
-              }),
-              const SizedBox(height: AppSizes.spaceBtwSections),
-
-              Obx(() => _PinDisplay(pin: controller.pin.value)),
-
-              const SizedBox(height: 36),
-
-              _Keypad(
-                onKeyPressed: controller.onKeyPressed,
-                onDelete: controller.onRemove,
-              ),
-
-              const SizedBox(height: 32),
-              SizedBox(
-                width: double.infinity,
-                height: 54,
-                child: Obx(
-                  () => ElevatedButton(
-                    onPressed:
-                        (controller.pin.value.length == 4 &&
-                            !controller.isLoading.value)
-                        ? () {
-                            controller.startLoading();
-                            onPinEntered?.call(controller.pin.value);
-                          }
-                        : null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4CAF50),
-                      disabledBackgroundColor: const Color(0xFFB0BEC5),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: controller.isLoading.value
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2,
-                            ),
-                          )
-                        : const Text(
-                            'UNLOCK',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 1.5,
-                            ),
-                          ),
+                    style: Theme.of(context).textTheme.headlineMedium,
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(height: AppSizes.spaceBtwItems / 2),
+                Obx(() {
+                  if (!controller.isLoading.value) {
+                    return Text(
+                      controller.isSetup.value
+                          ? subtitle
+                          : 'Verify your identity',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    );
+                  }
+                  return SizedBox();
+                }),
+                const SizedBox(height: AppSizes.spaceBtwSections),
+
+                Obx(() => _PinDisplay(pin: controller.pin.value)),
+
+                const SizedBox(height: 36),
+
+                _Keypad(
+                  onKeyPressed: controller.onKeyPressed,
+                  onDelete: controller.onRemove,
+                ),
+
+                const SizedBox(height: 32),
+                SizedBox(
+                  width: double.infinity,
+                  height: 54,
+                  child: Obx(
+                    () => ElevatedButton(
+                      onPressed:
+                          (controller.pin.value.length == 4 &&
+                              !controller.isLoading.value)
+                          ? () {
+                              controller.startLoading();
+                              onPinEntered?.call(controller.pin.value);
+                            }
+                          : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF4CAF50),
+                        disabledBackgroundColor: const Color(0xFFB0BEC5),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: controller.isLoading.value
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Text(
+                              'UNLOCK',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 1.5,
+                              ),
+                            ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
