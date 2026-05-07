@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:masroofy/features/budget/screens/add/new_expense_screen.dart';
-import 'package:masroofy/features/security/screens/pin_screen.dart';
+import 'package:masroofy/features/security/pin_screen.dart';
+import 'package:masroofy/features/budget/screens/new_expense_screen.dart';
 
 
 class AppRoutes {
@@ -10,7 +10,10 @@ class AppRoutes {
   static final List<GetPage> pages = [
     GetPage(
       name: pin,
-      page: () => const PinScreen(),
+      page: () => const PinScreen(
+        title: 'Enter a 4-digit PIN',
+        subtitle: 'Used to unlock the app later',
+      ),
     ),
 
     GetPage(

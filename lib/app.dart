@@ -17,6 +17,7 @@ class App extends StatelessWidget {
       darkTheme: AppTheme.darkTheme,
       initialBinding: GeneralBinding(),
       initialRoute: AppRoutes.pin,
+
       getPages: AppRoutes.pages,
     );
   }
