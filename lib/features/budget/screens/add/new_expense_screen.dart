@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:masroofy/features/budget/controllers/new_expense_screen_controller.dart';
+import 'package:masroofy/utils/constants/colors.dart';
 import 'package:masroofy/utils/constants/sizes.dart';
 import 'package:get/get.dart';
+import 'package:masroofy/utils/helpers/helper_functions.dart';
+import 'package:masroofy/utils/validators/validation.dart';
 
 class NewExpenseScreen extends StatelessWidget {
   const NewExpenseScreen({super.key});
@@ -9,16 +12,12 @@ class NewExpenseScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(NewExpenseController());
-
+    final dark = AppHelperFunctions.isDarkMode(context);
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF5F5F5),
-        elevation: 0,
-        leading: const BackButton(color: Colors.black87),
-        title: const Text(
+        title: Text(
           "New Expense",
-          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600),
+          style: Theme.of(context).textTheme.headlineMedium,
         ),
         centerTitle: true,
       ),
@@ -27,21 +26,19 @@ class NewExpenseScreen extends StatelessWidget {
           padding: const EdgeInsets.all(AppSizes.defaultSpace),
           child: Column(
             children: [
-
               /// Amount Display
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(AppSizes.lg),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: dark ? AppColors.dark : AppColors.light,
                   borderRadius: BorderRadius.circular(AppSizes.lg),
-                  border: Border.all(color: Colors.grey.shade200),
                 ),
                 child: Column(
                   children: [
-                    const Text(
+                    Text(
                       "Amount",
-                      style: TextStyle(color: Colors.black54, fontSize: 13),
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
 
                     const SizedBox(height: AppSizes.spaceBtwItems),
@@ -54,20 +51,66 @@ class NewExpenseScreen extends StatelessWidget {
                           child: const Icon(Icons.close, color: Colors.red),
                         ),
 
-                        Obx(() => Text(
-                          "${controller.amount.value} EGP",
-                          style: const TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 80),
+                            child: TextFormField(
+                              style: Theme.of(context).textTheme.headlineSmall,
+                              textAlign: TextAlign.center,
+                              focusNode: controller.focusNode,
+                              decoration: InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: !dark
+                                        ? AppColors.dark
+                                        : AppColors.light,
+                                  ),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: !dark
+                                        ? AppColors.dark
+                                        : AppColors.light,
+                                  ),
+                                ),
+                                suffix: Text(
+                                  "EGP",
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.headlineSmall,
+                                ),
+                              ),
+                              controller: controller.amount,
+                              validator: (value) =>
+                                  AppValidator.validateEmptyText(
+                                    'Amount',
+                                    value,
+                                  ),
+                            ),
                           ),
-                        )),
-
+                        ),
                         GestureDetector(
-                          onTap: controller.saveExpense,
+                          onTap: controller.dismiss,
                           child: const Icon(Icons.check, color: Colors.green),
                         ),
                       ],
+                    ),
+                    SizedBox(height: AppSizes.spaceBtwItems),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () =>
+                            _showAddCategoryDialog(context, controller),
+                        style: ElevatedButton.styleFrom(
+                          side: BorderSide.none,
+                          elevation: 4,
+                          backgroundColor: AppColors.buttonPrimary,
+                        ),
+                        child: const Text(
+                          "Log Expense",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -80,40 +123,40 @@ class NewExpenseScreen extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(AppSizes.lg),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: dark ? AppColors.dark : AppColors.light,
                   borderRadius: BorderRadius.circular(AppSizes.lg),
-                  border: Border.all(color: Colors.grey.shade200),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       "Select Category",
-                      style: TextStyle(color: Colors.black54, fontSize: 13),
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
 
                     const SizedBox(height: AppSizes.spaceBtwItems),
 
-                    Obx(() => Wrap(
-                      spacing: 10,
-                      runSpacing: 10,
-                      children: controller.categories
-                          .map((cat) => _buildCategory(cat, controller))
-                          .toList(),
-                    )),
+                    Obx(
+                      () => Wrap(
+                        spacing: 10,
+                        runSpacing: 10,
+                        children: controller.categories
+                            .map((cat) => _buildCategory(cat, controller))
+                            .toList(),
+                      ),
+                    ),
 
                     const SizedBox(height: AppSizes.spaceBtwSections),
 
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () => _showAddCategoryDialog(context, controller),
+                        onPressed: () =>
+                            _showAddCategoryDialog(context, controller),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black87,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+                          side: BorderSide.none,
+                          elevation: 4,
+                          backgroundColor: AppColors.buttonPrimary,
                         ),
                         child: const Text(
                           "Add Category",
@@ -124,6 +167,7 @@ class NewExpenseScreen extends StatelessWidget {
                   ],
                 ),
               ),
+
             ],
           ),
         ),
@@ -161,7 +205,10 @@ class NewExpenseScreen extends StatelessWidget {
     });
   }
 
-  void _showAddCategoryDialog(BuildContext context, NewExpenseController controller) {
+  void _showAddCategoryDialog(
+    BuildContext context,
+    NewExpenseController controller,
+  ) {
     final TextEditingController textController = TextEditingController();
 
     Get.dialog(
@@ -172,15 +219,16 @@ class NewExpenseScreen extends StatelessWidget {
           autofocus: true,
           decoration: InputDecoration(
             hintText: "Category name",
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text("Cancel", style: TextStyle(color: Colors.black54)),
+            child: const Text(
+              "Cancel",
+              style: TextStyle(color: Colors.black54),
+            ),
           ),
           ElevatedButton(
             onPressed: () {

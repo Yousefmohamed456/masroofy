@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'dart:math';
 import 'package:masroofy/common/texts/currency_text.dart';
+import 'package:masroofy/features/budget/controllers/budget_cycle_controller.dart';
 import 'package:masroofy/utils/constants/colors.dart';
 import 'package:masroofy/utils/constants/sizes.dart';
 import 'package:masroofy/utils/helpers/helper_functions.dart';
 
 class SpendingLimitContainer extends StatelessWidget {
-  final double fillPercentage;
-
   const SpendingLimitContainer({super.key, required this.fillPercentage});
+
+  final double fillPercentage;
 
   @override
   Widget build(BuildContext context) {
+    final controller = BudgetCycleController.instance;
     final dark = AppHelperFunctions.isDarkMode(context);
     final double strokeWidth = 20.0;
     return CustomPaint(
@@ -45,12 +48,20 @@ class SpendingLimitContainer extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text(
-                "Today's Limit",
-                style: Theme.of(context).textTheme.headlineSmall,
-                maxLines: 1,
+              Obx(
+                () => Text(
+                  controller.titleLimit,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                  maxLines: 1,
+                ),
               ),
-              CurrencyText(price: '1200 ', color: AppColors.red, isLarge: true),
+              Obx(
+                () => CurrencyText(
+                  price: '${controller.amountLimit} ',
+                  color: AppColors.red,
+                  isLarge: true,
+                ),
+              ),
             ],
           ),
         ),
@@ -86,7 +97,6 @@ class CircularProgressPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
     canvas.drawCircle(center, radius, trackPaint);
 
-
     // draw the progress
     Paint progressPaint = Paint()
       ..color = progressColor
@@ -94,7 +104,7 @@ class CircularProgressPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
-    const double startAngle = -pi/2;
+    const double startAngle = -pi / 2;
     final double endAngle = 2 * pi * percentage;
 
     canvas.drawArc(

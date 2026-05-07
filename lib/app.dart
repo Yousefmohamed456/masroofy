@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:masroofy/binding/general_binding.dart';
 import 'package:masroofy/routes/app_routes.dart';
 import 'package:masroofy/utils/theme/theme.dart';
 
@@ -14,6 +15,7 @@ class App extends StatelessWidget {
       themeMode: ThemeMode.system,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
+      initialBinding: GeneralBinding(),
       initialRoute: AppRoutes.pin,
       getPages: AppRoutes.pages,
     );

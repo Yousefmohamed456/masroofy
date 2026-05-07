@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:masroofy/features/budget/screens/add/add_tabs_screen.dart';
+import 'package:masroofy/features/budget/screens/add/new_expense_screen.dart';
+import 'package:masroofy/features/budget/screens/history/history_screen.dart';
 import 'package:masroofy/features/budget/screens/home/dashboard_screen.dart';
-import 'package:masroofy/features/budget/screens/new_expense_screen.dart';
 import 'package:masroofy/utils/constants/colors.dart';
 import 'package:masroofy/utils/helpers/helper_functions.dart';
 
@@ -14,19 +16,6 @@ class NavigationMenu extends StatelessWidget {
     final controller = Get.put(NavigationController());
     final darkMode = AppHelperFunctions.isDarkMode(context);
     return Scaffold(
-      floatingActionButton:  Container(
-        height: 48,
-        width: 48,
-        decoration: BoxDecoration(shape: BoxShape.circle),
-        child: FloatingActionButton(
-          onPressed: () {},
-          backgroundColor: darkMode?AppColors.dark:AppColors.light,
-          elevation: 4,
-          shape: const CircleBorder(),
-          child: Icon(Icons.add, size: 32, color: darkMode?Colors.white70:Colors.black),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       bottomNavigationBar: Obx(
         () => NavigationBar(
           height: 80,
@@ -43,19 +32,12 @@ class NavigationMenu extends StatelessWidget {
               icon: Icon(Icons.dashboard),
               label: 'Dashboard',
             ),
-            NavigationDestination(
-              icon: Icon(Icons.document_scanner_outlined),
-              label: 'Reports',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.history),
-              label: 'History',
-            ),
+            NavigationDestination(icon: Icon(Icons.manage_accounts), label: 'Budget'),
+            NavigationDestination(icon: Icon(Icons.history), label: 'History'),
             NavigationDestination(
               icon: Icon(Icons.settings),
               label: 'Settings',
             ),
-
           ],
         ),
       ),
@@ -69,5 +51,9 @@ class NavigationController extends GetxController {
 
   final Rx<int> selectedIndex = 0.obs;
 
-  final screens = [const DashboardScreen(), const NewExpenseScreen()];
+  final screens = [
+    const DashboardScreen(),
+    const AddTabsScreen(),
+    const HistoryScreen(),
+  ];
 }

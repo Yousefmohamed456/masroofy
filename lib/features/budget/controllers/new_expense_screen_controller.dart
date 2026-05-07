@@ -1,9 +1,15 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:masroofy/utils/popups/loaders.dart';
 
 class NewExpenseController extends GetxController {
+  static NewExpenseController get instance => Get.find();
 
   /// Amount
-  RxString amount = '0'.obs;
+  TextEditingController amount = TextEditingController();
+
+  /// used  for the right mark button
+  final FocusNode focusNode = FocusNode();
 
   /// Selected Category
   RxString selectedCategory = ''.obs;
@@ -17,27 +23,9 @@ class NewExpenseController extends GetxController {
     'Other',
   ].obs;
 
-  /// Add digit to amount
-  void addDigit(String digit) {
-    if (amount.value == '0') {
-      amount.value = digit;
-    } else {
-      amount.value += digit;
-    }
-  }
-
-  /// Remove last digit
-  void removeDigit() {
-    if (amount.value.length > 1) {
-      amount.value = amount.value.substring(0, amount.value.length - 1);
-    } else {
-      amount.value = '0';
-    }
-  }
-
   /// Clear amount
   void clearAmount() {
-    amount.value = '0';
+    amount.clear();
   }
 
   /// Select category
@@ -52,15 +40,21 @@ class NewExpenseController extends GetxController {
     }
   }
 
+  void dismiss() => focusNode.unfocus();
+
   /// Save expense
   void saveExpense() {
-    if (amount.value == '0' || selectedCategory.value.isEmpty) {
-      Get.snackbar('Error', 'Please enter amount and select category');
-      return;
-    }
+    if (amount.text == '0') {
+      Loaders.errorSnackBar(title: 'Error', message: 'Please Enter the amount');
 
-    // TODO: save to database
-    print('Amount: ${amount.value}');
-    print('Category: ${selectedCategory.value}');
+      if (selectedCategory.value.isEmpty) {
+        Loaders.errorSnackBar(
+          title: 'Error',
+          message: 'Please Select a Category',
+        );
+      }
+
+      // TODO: save to database
+    }
   }
 }

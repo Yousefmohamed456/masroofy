@@ -1,12 +1,11 @@
+import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-class DatabaseHelper {
-  // Make sure only one instance exists
-  DatabaseHelper._privateConstructor();
+class DatabaseHelper extends GetxService {
+  static DatabaseHelper get instance => Get.find();
 
-  static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
-  static Database? _database;
+  Database? _database;
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -46,6 +45,27 @@ class DatabaseHelper {
         FOREIGN KEY (cycleId) REFERENCES budget_cycles (cycleId) ON DELETE CASCADE
       )
     ''');
+
+    // Create Categories Table
+    await db.execute('''
+    CREATE TABLE categories(
+      categoryId INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL UNIQUE,
+      iconCode INTEGER NOT NULL
+    )
+  ''');
+
+    // insertDefaultIcons
+    final defaultCategories = [
+      {'name': 'Food', 'iconCode': 0xe25a},
+      {'name': 'Transport', 'iconCode': 0xe1d5},
+      {'name': 'Entertainment', 'iconCode': 0xe3e0},
+      {'name': 'Other', 'iconCode': 0xe14ea},
+    ];
+
+    for (var category in defaultCategories) {
+      await db.insert('categories', category);
+    }
   }
 
   /// Standard SQL Query with Arguments
@@ -58,7 +78,7 @@ class DatabaseHelper {
   }
 
   /// Using insert is safer than a raw sql query since the built-in one is safe against SQL injection, returns number of changes made
-  Future<int> insert(String table, Map<String, dynamic> data) async {
+  Future<int> insertSql(String table, Map<String, dynamic> data) async {
     final db = await instance.database;
     return await db.insert(
       table,
@@ -68,7 +88,7 @@ class DatabaseHelper {
   }
 
   /// Uses the WHERE SQL Clause to update specific records, returns number of changes made
-  Future<int> update(
+  Future<int> updateSql(
     String table,
     Map<String, dynamic> data,
     String whereColumn,

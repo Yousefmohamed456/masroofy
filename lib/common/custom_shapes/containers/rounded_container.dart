@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../../../utils/constants/colors.dart';
-import '../../../../utils/constants/sizes.dart';
+import 'package:masroofy/utils/constants/colors.dart';
+import 'package:masroofy/utils/constants/sizes.dart';
+
 
 class RoundedContainer extends StatelessWidget {
   const RoundedContainer({

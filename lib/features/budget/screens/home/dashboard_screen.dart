@@ -1,8 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:masroofy/common/custom_shapes/containers/circular_container.dart';
 import 'package:masroofy/common/texts/section_heading.dart';
+import 'package:masroofy/common/transaction/transaction_card.dart';
+import 'package:masroofy/features/budget/controllers/budget_cycle_controller.dart';
 import 'package:masroofy/features/budget/controllers/slider_controller.dart';
 import 'package:masroofy/features/budget/screens/home/widgets/pie_chart_container.dart';
 import 'package:masroofy/features/budget/screens/home/widgets/spending_limit_container.dart';
@@ -16,9 +19,33 @@ class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = AppHelperFunctions.isDarkMode(context);
-    final controller = Get.put(SliderController());
+    final sController = Get.put(SliderController());
+    final controller = Get.put(BudgetCycleController());
+
     return Scaffold(
-      appBar: AppBar(title: Text("Dashboard",style: Theme.of(context).textTheme.headlineLarge,)),
+      appBar: AppBar(
+        title: Text(
+          "Dashboard",
+          style: Theme.of(context).textTheme.headlineLarge,
+        ),
+      ),
+      floatingActionButton: Container(
+        height: 48,
+        width: 48,
+        decoration: BoxDecoration(shape: BoxShape.circle),
+        child: FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: dark ? AppColors.dark : AppColors.light,
+          elevation: 4,
+          shape: const CircleBorder(),
+          child: Icon(
+            Icons.add,
+            size: 32,
+            color: dark ? Colors.white70 : Colors.black,
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(AppSizes.defaultSpace),
@@ -66,49 +93,60 @@ class DashboardScreen extends StatelessWidget {
                           ),
                         ),
                         child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            isDense: true,
-                            borderRadius: BorderRadius.circular(AppSizes.nm),
-                            dropdownColor: dark
-                                ? Colors.grey[900]
-                                : Colors.white,
-                            icon: Padding(
-                              padding: const EdgeInsets.only(left: AppSizes.sm),
-                              child: Icon(
-                                Icons.keyboard_arrow_down_rounded,
-                                color: dark ? AppColors.light : AppColors.dark,
-                                size: 20,
+                          child: Obx(
+                            () => DropdownButton<String>(
+                              isDense: true,
+                              value: controller.selectedTimeFrame.value,
+                              borderRadius: BorderRadius.circular(AppSizes.nm),
+                              dropdownColor: dark
+                                  ? Colors.grey[900]
+                                  : Colors.white,
+                              icon: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: AppSizes.sm,
+                                ),
+                                child: Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  color: dark
+                                      ? AppColors.light
+                                      : AppColors.dark,
+                                  size: 20,
+                                ),
                               ),
+                              elevation: 4,
+                              items: [
+                                DropdownMenuItem(
+                                  value: 'day',
+                                  child: Text(
+                                    'This Day',
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.bodyMedium,
+                                  ),
+                                ),
+                                DropdownMenuItem(
+                                  value: 'week',
+                                  child: Text(
+                                    'This Week',
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.bodyMedium,
+                                  ),
+                                ),
+                                DropdownMenuItem(
+                                  value: 'month',
+                                  child: Text(
+                                    'This Month',
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.bodyMedium,
+                                  ),
+                                ),
+                              ],
+
+                              onChanged: (value) =>
+                                  controller.updateTimeframe(value),
                             ),
-                            elevation: 4,
-                            items: [
-                              DropdownMenuItem(
-                                value: 'day',
-                                child: Text(
-                                  'This Day',
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                              ),
-                              DropdownMenuItem(
-                                value: 'week',
-                                child: Text(
-                                  'This Week',
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                              ),
-                              DropdownMenuItem(
-                                value: 'year',
-                                child: Text(
-                                  'This Year',
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                              ),
-                            ],
-                            hint: Text(
-                              'Time',
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            ),
-                            onChanged: (value) {},
                           ),
                         ),
                       ),
@@ -124,9 +162,9 @@ class DashboardScreen extends StatelessWidget {
                         height: 275,
                         viewportFraction: 1,
                         onPageChanged: (index, _) =>
-                            controller.updatePageIndicator(index),
+                            sController.updatePageIndicator(index),
                       ),
-                      carouselController: controller.carousalController,
+                      carouselController: sController.carousalController,
                     ),
                     Obx(
                       () => Row(
@@ -134,14 +172,14 @@ class DashboardScreen extends StatelessWidget {
                         children: [
                           for (int i = 0; i < 2; i++)
                             GestureDetector(
-                              onTap: () => controller.dotNavigationClick(i),
+                              onTap: () => sController.dotNavigationClick(i),
                               child: CircularContainer(
                                 width: 20,
                                 height: 4,
                                 margin: const EdgeInsets.only(right: 10),
                                 radius: 20,
                                 backGroundColor:
-                                    controller.carousalCurrentIndex.value == i
+                                    sController.carousalCurrentIndex.value == i
                                     ? AppColors.primaryColor
                                     : AppColors.grey,
                               ),
@@ -174,69 +212,21 @@ class DashboardScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    TransactionItem(),
-                    SizedBox(height: AppSizes.spaceBtwItems),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(AppSizes.spaceBtwItems),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Colors.amber,
-                              ),
-                              child: Icon(
-                                Icons.directions_car_filled,
-                                color: Colors.white,
-                                size: 32,
-                              ),
-                            ),
-                            SizedBox(width: AppSizes.spaceBtwItems),
-                            Text(
-                              'Transport\n50 EGP',
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            ),
-                          ],
+                    for (int i = 0; i < 3; i++)
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: AppSizes.spaceBtwItems,
                         ),
-                        Text(
-                          '25, Mar 2026\n      Cash',
-                          style: Theme.of(context).textTheme.labelMedium,
+                        child: TransactionCard(
+                          amount: '150',
+                          categoryName: 'Food',
+                          paymentMethod: "Cash",
+                          transactionDate: DateFormat(
+                            'dd,MMM yyyy',
+                          ).format(DateTime.now()),
+                          icon: Icons.fastfood,
                         ),
-                      ],
-                    ),
-                    SizedBox(height: AppSizes.spaceBtwItems),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(AppSizes.spaceBtwItems),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Colors.green,
-                              ),
-                              child: Icon(
-                                Icons.account_balance,
-                                color: Colors.white,
-                                size: 32,
-                              ),
-                            ),
-                            SizedBox(width: AppSizes.spaceBtwItems),
-                            Text(
-                              'Investment\n1000 EGP',
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            ),
-                          ],
-                        ),
-                        Text(
-                          '20, Mar 2026\n      Card',
-                          style: Theme.of(context).textTheme.labelMedium,
-                        ),
-                      ],
-                    ),
+                      ),
                   ],
                 ),
               ),
@@ -244,46 +234,6 @@ class DashboardScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class TransactionItem extends StatelessWidget {
-  const TransactionItem({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            Container(
-              padding: EdgeInsets.all(AppSizes.spaceBtwItems),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.red,
-              ),
-              child: Icon(
-                Icons.fastfood,
-                color: Colors.white,
-                size: 32,
-              ),
-            ),
-            SizedBox(width: AppSizes.spaceBtwItems),
-            Text(
-              "Food\n100 EGP",
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-          ],
-        ),
-        Text(
-          '27, Mar 2026\n      Cash',
-          style: Theme.of(context).textTheme.labelMedium,
-        ),
-      ],
     );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:masroofy/features/budget/screens/new_expense_screen.dart';
+import 'package:masroofy/features/budget/screens/add/new_expense_screen.dart';
 import 'package:masroofy/features/security/screens/pin_screen.dart';
 
 
